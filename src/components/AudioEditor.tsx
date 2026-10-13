@@ -267,7 +267,6 @@ export default function AudioEditor({ t }: AudioEditorProps) {
     const regions = RegionsPlugin.create();
     regionsPluginRef.current = regions;
 
-    // Keep waveColor and progressColor unified (#AEC4D4) so unselected regions never turn red!
     const ws = WaveSurfer.create({
       container: waveformContainerRef.current,
       waveColor: '#AEC4D4',
@@ -277,7 +276,7 @@ export default function AudioEditor({ t }: AudioEditorProps) {
       barWidth: 3,
       barGap: 2,
       barRadius: 3,
-      height: 172,
+      height: 196,
       normalize: true,
       minPxPerSec: 1,
       autoScroll: true,
@@ -611,7 +610,7 @@ export default function AudioEditor({ t }: AudioEditorProps) {
           </div>
         </div>
       ) : (
-        /* STEP 2: Interactive Waveform & Responsive Control Workspace */
+        /* STEP 2: Full-Width Waveform Above + Horizontal Trim & Fade Control Bar Below */
         <div className="space-y-5">
           {/* Top File Metadata & Quick Actions Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/55 dark:bg-charcoal-surface px-4 py-3 sm:px-5">
@@ -646,309 +645,306 @@ export default function AudioEditor({ t }: AudioEditorProps) {
             </div>
           </div>
 
-          {/* Desktop Grid: Expansive Central Waveform + Side/Bottom Control Panel */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            {/* Central Waveform Canvas Card */}
-            <div className="lg:col-span-8 flex flex-col rounded-3xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface p-4 sm:p-6 shadow-minimal dark:shadow-minimal-dark">
-              {/* Waveform Status Header */}
-              <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-cream-white dark:bg-charcoal px-2.5 py-1 font-semibold text-[#231F20] dark:text-cream-white border border-tan-beige dark:border-charcoal-border">
-                    <span className="h-2 w-2 rounded-full bg-deep-burgundy animate-pulse" aria-hidden="true" />
-                    {t.editor.currentCursor}: {formatTimestamp(currentTime)}
-                  </span>
-                  <span className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-amber-500/15 dark:bg-amber-400/15 border border-deep-burgundy/30 px-2.5 py-1 text-[11px] font-bold text-deep-burgundy dark:text-amber-300">
-                    {formatTimestamp(startTime)} → {formatTimestamp(endTime)}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="rounded-lg bg-deep-burgundy text-cream-white px-2.5 py-1 font-semibold">
-                    {t.editor.selectionLength}: {formatTimestamp(clipDuration)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Waveform Canvas Surface */}
-              <div
-                role="region"
-                aria-label="Interactive Audio Waveform"
-                className="relative overflow-hidden rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-4 py-5"
-              >
-                {!isWaveReady && (
-                  <div
-                    role="status"
-                    aria-live="polite"
-                    aria-label="Loading audio waveform"
-                    className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-cream-white/90 dark:bg-charcoal/90 backdrop-blur-xs"
-                  >
-                    <Loader2 className="h-7 w-7 animate-spin text-deep-burgundy dark:text-slate-blue" aria-hidden="true" />
-                  </div>
-                )}
-
-                <div ref={waveformContainerRef} className="w-full select-none" />
-              </div>
-
-              <p className="mt-2.5 text-center text-xs text-[#231F20]/65 dark:text-cream-white/60">
-                {t.editor.dragHint}
-              </p>
-
-              {/* Playback & Zoom Transport Bar */}
-              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-tan-beige/80 dark:border-charcoal-border pt-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  {/* Play / Pause Button */}
-                  <button
-                    type="button"
-                    onClick={handleTogglePlayRegion}
-                    disabled={!isWaveReady}
-                    aria-label={isPlaying ? t.editor.pause : t.editor.playRegion}
-                    className="inline-flex items-center gap-2 rounded-xl bg-deep-burgundy hover:bg-burgundy-hover disabled:opacity-50 px-4 py-2.5 text-xs sm:text-sm font-semibold text-cream-white shadow-xs transition-all"
-                  >
-                    {isPlaying ? (
-                      <>
-                        <Pause className="h-4 w-4 fill-current" aria-hidden="true" />
-                        <span>{t.editor.pause}</span>
-                      </>
-                    ) : (
-                      <>
-                        <Play className="h-4 w-4 fill-current" aria-hidden="true" />
-                        <span>{t.editor.playRegion}</span>
-                      </>
-                    )}
-                  </button>
-
-                  {/* Replay from Selection Start */}
-                  <button
-                    type="button"
-                    onClick={handlePlayFromRegionStart}
-                    disabled={!isWaveReady}
-                    aria-label={`${t.editor.playRegion} (${formatTimestamp(startTime)})`}
-                    title={t.editor.playRegion}
-                    className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-3 text-xs font-semibold text-[#231F20] dark:text-cream-white hover:bg-tan-beige dark:hover:bg-charcoal-elevated transition-colors"
-                  >
-                    <Scissors className="h-3.5 w-3.5 text-deep-burgundy dark:text-slate-blue" aria-hidden="true" />
-                    <span className="hidden sm:inline">{formatTimestamp(startTime)}</span>
-                  </button>
-
-                  {/* Loop Toggle */}
-                  <button
-                    type="button"
-                    onClick={() => setLoopRegion((prev) => !prev)}
-                    aria-pressed={loopRegion}
-                    aria-label={t.editor.loopRegion}
-                    title={t.editor.loopRegion}
-                    className={`inline-flex h-10 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-colors ${
-                      loopRegion
-                        ? 'border-deep-burgundy bg-deep-burgundy/12 dark:bg-deep-burgundy/30 text-deep-burgundy dark:text-cream-white'
-                        : 'border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal text-[#231F20]/70 dark:text-cream-white/70'
-                    }`}
-                  >
-                    <Repeat className="h-3.5 w-3.5" aria-hidden="true" />
-                    <span className="hidden md:inline">{t.editor.loopRegion}</span>
-                  </button>
-
-                  {/* Reset Trim Region */}
-                  <button
-                    type="button"
-                    onClick={handleResetRegion}
-                    disabled={!isWaveReady}
-                    aria-label={t.editor.resetRegion}
-                    title={t.editor.resetRegion}
-                    className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-3 text-xs font-semibold text-[#231F20] dark:text-cream-white hover:bg-tan-beige dark:hover:bg-charcoal-elevated transition-colors"
-                  >
-                    <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
-                    <span className="hidden xl:inline">{t.editor.resetRegion}</span>
-                  </button>
-
-                  {/* Mute Toggle */}
-                  <button
-                    type="button"
-                    onClick={handleToggleMute}
-                    disabled={!isWaveReady}
-                    aria-pressed={isMuted}
-                    aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal text-[#231F20] dark:text-cream-white hover:bg-tan-beige dark:hover:bg-charcoal-elevated transition-colors"
-                  >
-                    {isMuted ? (
-                      <VolumeX className="h-4 w-4 text-deep-burgundy" aria-hidden="true" />
-                    ) : (
-                      <Volume2 className="h-4 w-4" aria-hidden="true" />
-                    )}
-                  </button>
-                </div>
-
-                {/* Zoom Slider */}
-                <div className="flex items-center gap-2 rounded-xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-3 py-1.5">
-                  <button
-                    type="button"
-                    onClick={() => handleZoomChange(zoomLevel - 15)}
-                    className="text-[#231F20]/70 dark:text-cream-white/70 hover:text-deep-burgundy"
-                    aria-label="Zoom Out Waveform"
-                  >
-                    <ZoomOut className="h-4 w-4" aria-hidden="true" />
-                  </button>
-                  <input
-                    type="range"
-                    min={1}
-                    max={150}
-                    value={zoomLevel}
-                    onChange={(e) => handleZoomChange(Number(e.target.value))}
-                    aria-label={t.editor.zoom}
-                    className="audio-zoom-slider w-20 sm:w-28"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleZoomChange(zoomLevel + 15)}
-                    className="text-[#231F20]/70 dark:text-cream-white/70 hover:text-deep-burgundy"
-                    aria-label="Zoom In Waveform"
-                  >
-                    <ZoomIn className="h-4 w-4" aria-hidden="true" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Right / Bottom Control Panel: Timestamps, Fade Checkboxes, Format & FFmpeg Export */}
-            <div className="lg:col-span-4 flex flex-col gap-4 rounded-3xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/55 dark:bg-charcoal-surface p-5 sm:p-6 shadow-minimal dark:shadow-minimal-dark">
-              <div className="flex items-center justify-between border-b border-deep-burgundy/10 dark:border-charcoal-border pb-3">
-                <div className="flex items-center gap-2">
-                  <Sliders className="h-4 w-4 text-deep-burgundy dark:text-slate-blue" aria-hidden="true" />
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-[#231F20] dark:text-cream-white">
-                    Trim & Fade Controls
-                  </h3>
-                </div>
-                <span className="font-mono text-xs font-semibold text-deep-burgundy dark:text-slate-blue">
-                  {clipDuration.toFixed(2)}s
+          {/* 1. FULL-WIDTH MAIN AUDIO CUTTER WAVEFORM CARD */}
+          <div className="w-full flex flex-col rounded-3xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface p-4 sm:p-6 shadow-minimal dark:shadow-minimal-dark">
+            {/* Waveform Status Header */}
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-cream-white dark:bg-charcoal px-3 py-1 font-semibold text-[#231F20] dark:text-cream-white border border-tan-beige dark:border-charcoal-border">
+                  <span className="h-2 w-2 rounded-full bg-deep-burgundy animate-pulse" aria-hidden="true" />
+                  {t.editor.currentCursor}: {formatTimestamp(currentTime)}
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-amber-500/15 dark:bg-amber-400/15 border border-deep-burgundy/30 px-3 py-1 text-[11px] font-bold text-deep-burgundy dark:text-amber-300">
+                  {formatTimestamp(startTime)} → {formatTimestamp(endTime)}
                 </span>
               </div>
 
-              {/* Cut From & To Timestamp Inputs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3.5">
-                {/* Cut From (Start) */}
-                <div className="rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal p-3.5">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label
-                      htmlFor="cut-from-input"
-                      className="text-xs font-bold text-[#231F20]/80 dark:text-cream-white/80"
-                    >
-                      {t.editor.cutFrom}
-                    </label>
-                    <button
-                      type="button"
-                      aria-label={`${t.editor.cutFrom}: ${t.editor.setAtCursor}`}
-                      onClick={() => applyNewBounds(currentTime, endTime)}
-                      className="text-[11px] font-semibold text-deep-burgundy dark:text-slate-blue hover:underline"
-                    >
-                      {t.editor.setAtCursor}
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => applyNewBounds(startTime - 0.1, endTime)}
-                      aria-label={`${t.editor.cutFrom} ${t.editor.fineTuneMinus}`}
-                      title={t.editor.fineTuneMinus}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface font-mono text-xs font-bold hover:bg-tan-beige dark:hover:bg-charcoal-elevated"
-                    >
-                      -0.1
-                    </button>
-                    <input
-                      id="cut-from-input"
-                      type="text"
-                      aria-label={t.editor.cutFrom}
-                      value={startInput}
-                      onChange={(e) => setStartInput(e.target.value)}
-                      onBlur={() => {
+              <div className="flex items-center gap-2">
+                <span className="rounded-lg bg-deep-burgundy text-cream-white px-3 py-1 font-semibold">
+                  {t.editor.selectionLength}: {formatTimestamp(clipDuration)}
+                </span>
+              </div>
+            </div>
+
+            {/* Expansive Full-Width Waveform Canvas Surface */}
+            <div
+              role="region"
+              aria-label="Interactive Audio Waveform"
+              className="relative w-full overflow-hidden rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-4 py-6"
+            >
+              {!isWaveReady && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  aria-label="Loading audio waveform"
+                  className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-cream-white/90 dark:bg-charcoal/90 backdrop-blur-xs"
+                >
+                  <Loader2 className="h-7 w-7 animate-spin text-deep-burgundy dark:text-slate-blue" aria-hidden="true" />
+                </div>
+              )}
+
+              <div ref={waveformContainerRef} className="w-full select-none" />
+            </div>
+
+            <p className="mt-2.5 text-center text-xs text-[#231F20]/65 dark:text-cream-white/60">
+              {t.editor.dragHint}
+            </p>
+
+            {/* Playback & Zoom Transport Bar */}
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-tan-beige/80 dark:border-charcoal-border pt-4">
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Play / Pause Button */}
+                <button
+                  type="button"
+                  onClick={handleTogglePlayRegion}
+                  disabled={!isWaveReady}
+                  aria-label={isPlaying ? t.editor.pause : t.editor.playRegion}
+                  className="inline-flex items-center gap-2 rounded-xl bg-deep-burgundy hover:bg-burgundy-hover disabled:opacity-50 px-5 py-2.5 text-xs sm:text-sm font-semibold text-cream-white shadow-xs transition-all"
+                >
+                  {isPlaying ? (
+                    <>
+                      <Pause className="h-4 w-4 fill-current" aria-hidden="true" />
+                      <span>{t.editor.pause}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-4 w-4 fill-current" aria-hidden="true" />
+                      <span>{t.editor.playRegion}</span>
+                    </>
+                  )}
+                </button>
+
+                {/* Replay from Selection Start */}
+                <button
+                  type="button"
+                  onClick={handlePlayFromRegionStart}
+                  disabled={!isWaveReady}
+                  aria-label={`${t.editor.playRegion} (${formatTimestamp(startTime)})`}
+                  title={t.editor.playRegion}
+                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-3.5 text-xs font-semibold text-[#231F20] dark:text-cream-white hover:bg-tan-beige dark:hover:bg-charcoal-elevated transition-colors"
+                >
+                  <Scissors className="h-3.5 w-3.5 text-deep-burgundy dark:text-slate-blue" aria-hidden="true" />
+                  <span>{formatTimestamp(startTime)}</span>
+                </button>
+
+                {/* Loop Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setLoopRegion((prev) => !prev)}
+                  aria-pressed={loopRegion}
+                  aria-label={t.editor.loopRegion}
+                  title={t.editor.loopRegion}
+                  className={`inline-flex h-10 items-center gap-1.5 rounded-xl border px-3.5 text-xs font-semibold transition-colors ${
+                    loopRegion
+                      ? 'border-deep-burgundy bg-deep-burgundy/12 dark:bg-deep-burgundy/30 text-deep-burgundy dark:text-cream-white'
+                      : 'border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal text-[#231F20]/70 dark:text-cream-white/70'
+                  }`}
+                >
+                  <Repeat className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>{t.editor.loopRegion}</span>
+                </button>
+
+                {/* Reset Trim Region */}
+                <button
+                  type="button"
+                  onClick={handleResetRegion}
+                  disabled={!isWaveReady}
+                  aria-label={t.editor.resetRegion}
+                  title={t.editor.resetRegion}
+                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-3.5 text-xs font-semibold text-[#231F20] dark:text-cream-white hover:bg-tan-beige dark:hover:bg-charcoal-elevated transition-colors"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>{t.editor.resetRegion}</span>
+                </button>
+
+                {/* Mute Toggle */}
+                <button
+                  type="button"
+                  onClick={handleToggleMute}
+                  disabled={!isWaveReady}
+                  aria-pressed={isMuted}
+                  aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal text-[#231F20] dark:text-cream-white hover:bg-tan-beige dark:hover:bg-charcoal-elevated transition-colors"
+                >
+                  {isMuted ? (
+                    <VolumeX className="h-4 w-4 text-deep-burgundy" aria-hidden="true" />
+                  ) : (
+                    <Volume2 className="h-4 w-4" aria-hidden="true" />
+                  )}
+                </button>
+              </div>
+
+              {/* Zoom Slider */}
+              <div className="flex items-center gap-2 rounded-xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-3.5 py-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleZoomChange(zoomLevel - 15)}
+                  className="text-[#231F20]/70 dark:text-cream-white/70 hover:text-deep-burgundy"
+                  aria-label="Zoom Out Waveform"
+                >
+                  <ZoomOut className="h-4 w-4" aria-hidden="true" />
+                </button>
+                <input
+                  type="range"
+                  min={1}
+                  max={150}
+                  value={zoomLevel}
+                  onChange={(e) => handleZoomChange(Number(e.target.value))}
+                  aria-label={t.editor.zoom}
+                  className="audio-zoom-slider w-28 sm:w-36"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleZoomChange(zoomLevel + 15)}
+                  className="text-[#231F20]/70 dark:text-cream-white/70 hover:text-deep-burgundy"
+                  aria-label="Zoom In Waveform"
+                >
+                  <ZoomIn className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. HORIZONTAL TRIM, FADE & EXPORT CONTROL PANEL BELOW WAVEFORM */}
+          <div className="w-full rounded-3xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/55 dark:bg-charcoal-surface p-5 sm:p-6 shadow-minimal dark:shadow-minimal-dark">
+            <div className="mb-4 flex items-center justify-between border-b border-deep-burgundy/10 dark:border-charcoal-border pb-3">
+              <div className="flex items-center gap-2">
+                <Sliders className="h-4 w-4 text-deep-burgundy dark:text-slate-blue" aria-hidden="true" />
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[#231F20] dark:text-cream-white">
+                  Trim & Fade Controls
+                </h3>
+              </div>
+              <span className="font-mono text-xs font-semibold text-deep-burgundy dark:text-slate-blue">
+                {t.editor.selectionLength}: {clipDuration.toFixed(2)}s
+              </span>
+            </div>
+
+            {/* 4-Column Horizontal Control Bar on Desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-stretch">
+              {/* Column 1 (3 cols): Cut From (Start) */}
+              <div className="lg:col-span-3 flex flex-col justify-between rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal p-3.5">
+                <div className="flex items-center justify-between mb-2">
+                  <label
+                    htmlFor="cut-from-input"
+                    className="text-xs font-bold text-[#231F20]/80 dark:text-cream-white/80"
+                  >
+                    {t.editor.cutFrom}
+                  </label>
+                  <button
+                    type="button"
+                    aria-label={`${t.editor.cutFrom}: ${t.editor.setAtCursor}`}
+                    onClick={() => applyNewBounds(currentTime, endTime)}
+                    className="text-[11px] font-semibold text-deep-burgundy dark:text-slate-blue hover:underline"
+                  >
+                    {t.editor.setAtCursor}
+                  </button>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => applyNewBounds(startTime - 0.1, endTime)}
+                    aria-label={`${t.editor.cutFrom} ${t.editor.fineTuneMinus}`}
+                    title={t.editor.fineTuneMinus}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface font-mono text-xs font-bold hover:bg-tan-beige dark:hover:bg-charcoal-elevated"
+                  >
+                    -0.1
+                  </button>
+                  <input
+                    id="cut-from-input"
+                    type="text"
+                    aria-label={t.editor.cutFrom}
+                    value={startInput}
+                    onChange={(e) => setStartInput(e.target.value)}
+                    onBlur={() => {
+                      const parsed = parseTimestampInput(startInput, startTime);
+                      applyNewBounds(parsed, endTime);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
                         const parsed = parseTimestampInput(startInput, startTime);
                         applyNewBounds(parsed, endTime);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          const parsed = parseTimestampInput(startInput, startTime);
-                          applyNewBounds(parsed, endTime);
-                        }
-                      }}
-                      className="h-9 w-full rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/25 dark:bg-charcoal-surface px-2.5 text-center font-mono text-sm font-bold text-[#231F20] dark:text-cream-white focus:border-deep-burgundy focus:outline-none"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => applyNewBounds(startTime + 0.1, endTime)}
-                      aria-label={`${t.editor.cutFrom} ${t.editor.fineTunePlus}`}
-                      title={t.editor.fineTunePlus}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface font-mono text-xs font-bold hover:bg-tan-beige dark:hover:bg-charcoal-elevated"
-                    >
-                      +0.1
-                    </button>
-                  </div>
-                </div>
-
-                {/* Cut To (End) */}
-                <div className="rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal p-3.5">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label
-                      htmlFor="cut-to-input"
-                      className="text-xs font-bold text-[#231F20]/80 dark:text-cream-white/80"
-                    >
-                      {t.editor.cutTo}
-                    </label>
-                    <button
-                      type="button"
-                      aria-label={`${t.editor.cutTo}: ${t.editor.setAtCursor}`}
-                      onClick={() => applyNewBounds(startTime, currentTime)}
-                      className="text-[11px] font-semibold text-deep-burgundy dark:text-slate-blue hover:underline"
-                    >
-                      {t.editor.setAtCursor}
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => applyNewBounds(startTime, endTime - 0.1)}
-                      aria-label={`${t.editor.cutTo} ${t.editor.fineTuneMinus}`}
-                      title={t.editor.fineTuneMinus}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface font-mono text-xs font-bold hover:bg-tan-beige dark:hover:bg-charcoal-elevated"
-                    >
-                      -0.1
-                    </button>
-                    <input
-                      id="cut-to-input"
-                      type="text"
-                      aria-label={t.editor.cutTo}
-                      value={endInput}
-                      onChange={(e) => setEndInput(e.target.value)}
-                      onBlur={() => {
-                        const parsed = parseTimestampInput(endInput, endTime);
-                        applyNewBounds(startTime, parsed);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          const parsed = parseTimestampInput(endInput, endTime);
-                          applyNewBounds(startTime, parsed);
-                        }
-                      }}
-                      className="h-9 w-full rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/25 dark:bg-charcoal-surface px-2.5 text-center font-mono text-sm font-bold text-[#231F20] dark:text-cream-white focus:border-deep-burgundy focus:outline-none"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => applyNewBounds(startTime, endTime + 0.1)}
-                      aria-label={`${t.editor.cutTo} ${t.editor.fineTunePlus}`}
-                      title={t.editor.fineTunePlus}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface font-mono text-xs font-bold hover:bg-tan-beige dark:hover:bg-charcoal-elevated"
-                    >
-                      +0.1
-                    </button>
-                  </div>
+                      }
+                    }}
+                    className="h-10 w-full rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/25 dark:bg-charcoal-surface px-2.5 text-center font-mono text-sm font-bold text-[#231F20] dark:text-cream-white focus:border-deep-burgundy focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => applyNewBounds(startTime + 0.1, endTime)}
+                    aria-label={`${t.editor.cutFrom} ${t.editor.fineTunePlus}`}
+                    title={t.editor.fineTunePlus}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface font-mono text-xs font-bold hover:bg-tan-beige dark:hover:bg-charcoal-elevated"
+                  >
+                    +0.1
+                  </button>
                 </div>
               </div>
 
-              {/* Fade In & Fade Out Checkboxes */}
-              <div className="space-y-2.5 rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal p-3.5">
-                <label className="flex cursor-pointer items-center justify-between rounded-xl px-2 py-1.5 hover:bg-tan-beige/35 dark:hover:bg-charcoal-surface transition-colors">
+              {/* Column 2 (3 cols): To (End) */}
+              <div className="lg:col-span-3 flex flex-col justify-between rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal p-3.5">
+                <div className="flex items-center justify-between mb-2">
+                  <label
+                    htmlFor="cut-to-input"
+                    className="text-xs font-bold text-[#231F20]/80 dark:text-cream-white/80"
+                  >
+                    {t.editor.cutTo}
+                  </label>
+                  <button
+                    type="button"
+                    aria-label={`${t.editor.cutTo}: ${t.editor.setAtCursor}`}
+                    onClick={() => applyNewBounds(startTime, currentTime)}
+                    className="text-[11px] font-semibold text-deep-burgundy dark:text-slate-blue hover:underline"
+                  >
+                    {t.editor.setAtCursor}
+                  </button>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => applyNewBounds(startTime, endTime - 0.1)}
+                    aria-label={`${t.editor.cutTo} ${t.editor.fineTuneMinus}`}
+                    title={t.editor.fineTuneMinus}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface font-mono text-xs font-bold hover:bg-tan-beige dark:hover:bg-charcoal-elevated"
+                  >
+                    -0.1
+                  </button>
+                  <input
+                    id="cut-to-input"
+                    type="text"
+                    aria-label={t.editor.cutTo}
+                    value={endInput}
+                    onChange={(e) => setEndInput(e.target.value)}
+                    onBlur={() => {
+                      const parsed = parseTimestampInput(endInput, endTime);
+                      applyNewBounds(startTime, parsed);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        const parsed = parseTimestampInput(endInput, endTime);
+                        applyNewBounds(startTime, parsed);
+                      }
+                    }}
+                    className="h-10 w-full rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/25 dark:bg-charcoal-surface px-2.5 text-center font-mono text-sm font-bold text-[#231F20] dark:text-cream-white focus:border-deep-burgundy focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => applyNewBounds(startTime, endTime + 0.1)}
+                    aria-label={`${t.editor.cutTo} ${t.editor.fineTunePlus}`}
+                    title={t.editor.fineTunePlus}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface font-mono text-xs font-bold hover:bg-tan-beige dark:hover:bg-charcoal-elevated"
+                  >
+                    +0.1
+                  </button>
+                </div>
+              </div>
+
+              {/* Column 3 (3 cols): Fade In & Fade Out Toggles */}
+              <div className="lg:col-span-3 flex flex-col justify-center gap-2 rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal p-3.5">
+                <label className="flex cursor-pointer items-center justify-between rounded-lg px-1.5 py-1 hover:bg-tan-beige/35 dark:hover:bg-charcoal-surface transition-colors">
                   <div>
                     <span className="block text-xs font-bold text-[#231F20] dark:text-cream-white">
                       {t.editor.fadeIn}
                     </span>
-                    <span className="text-[11px] text-[#231F20]/60 dark:text-cream-white/55">
+                    <span className="text-[10px] text-[#231F20]/60 dark:text-cream-white/55">
                       {t.editor.fadeSeconds}
                     </span>
                   </div>
@@ -957,18 +953,18 @@ export default function AudioEditor({ t }: AudioEditorProps) {
                     aria-label={t.editor.fadeIn}
                     checked={fadeIn}
                     onChange={(e) => setFadeIn(e.target.checked)}
-                    className="h-5 w-5 rounded border-tan-beige accent-deep-burgundy cursor-pointer"
+                    className="h-4 w-4 rounded border-tan-beige accent-deep-burgundy cursor-pointer"
                   />
                 </label>
 
                 <div className="h-px bg-tan-beige/60 dark:bg-charcoal-border" aria-hidden="true" />
 
-                <label className="flex cursor-pointer items-center justify-between rounded-xl px-2 py-1.5 hover:bg-tan-beige/35 dark:hover:bg-charcoal-surface transition-colors">
+                <label className="flex cursor-pointer items-center justify-between rounded-lg px-1.5 py-1 hover:bg-tan-beige/35 dark:hover:bg-charcoal-surface transition-colors">
                   <div>
                     <span className="block text-xs font-bold text-[#231F20] dark:text-cream-white">
                       {t.editor.fadeOut}
                     </span>
-                    <span className="text-[11px] text-[#231F20]/60 dark:text-cream-white/55">
+                    <span className="text-[10px] text-[#231F20]/60 dark:text-cream-white/55">
                       {t.editor.fadeSeconds}
                     </span>
                   </div>
@@ -977,86 +973,87 @@ export default function AudioEditor({ t }: AudioEditorProps) {
                     aria-label={t.editor.fadeOut}
                     checked={fadeOut}
                     onChange={(e) => setFadeOut(e.target.checked)}
-                    className="h-5 w-5 rounded border-tan-beige accent-deep-burgundy cursor-pointer"
+                    className="h-4 w-4 rounded border-tan-beige accent-deep-burgundy cursor-pointer"
                   />
                 </label>
               </div>
 
-              {/* Output Format Selector (MP3 / WAV) */}
-              <div
-                role="group"
-                aria-label={t.editor.outputFormat}
-                className="flex items-center justify-between rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-3.5 py-2.5"
-              >
-                <span className="text-xs font-bold text-[#231F20] dark:text-cream-white">
-                  {t.editor.outputFormat}
-                </span>
-                <div className="inline-flex rounded-xl bg-tan-beige/55 dark:bg-charcoal-surface p-1">
-                  {(['mp3', 'wav'] as const).map((fmt) => (
-                    <button
-                      key={fmt}
-                      type="button"
-                      aria-pressed={outputFormat === fmt}
-                      aria-label={`${t.editor.outputFormat}: ${fmt.toUpperCase()}`}
-                      onClick={() => setOutputFormat(fmt)}
-                      className={`rounded-lg px-3 py-1 font-mono text-xs font-bold uppercase transition-colors ${
-                        outputFormat === fmt
-                          ? 'bg-deep-burgundy text-cream-white shadow-xs'
-                          : 'text-[#231F20]/75 dark:text-cream-white/75 hover:text-[#231F20] dark:hover:text-cream-white'
-                      }`}
-                    >
-                      .{fmt}
-                    </button>
-                  ))}
+              {/* Column 4 (3 cols): Export Format + Export CTA Button */}
+              <div className="lg:col-span-3 flex flex-col justify-between gap-2.5">
+                <div
+                  role="group"
+                  aria-label={t.editor.outputFormat}
+                  className="flex items-center justify-between rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal px-3.5 py-2"
+                >
+                  <span className="text-xs font-bold text-[#231F20] dark:text-cream-white">
+                    {t.editor.outputFormat}
+                  </span>
+                  <div className="inline-flex rounded-xl bg-tan-beige/55 dark:bg-charcoal-surface p-0.5">
+                    {(['mp3', 'wav'] as const).map((fmt) => (
+                      <button
+                        key={fmt}
+                        type="button"
+                        aria-pressed={outputFormat === fmt}
+                        aria-label={`${t.editor.outputFormat}: ${fmt.toUpperCase()}`}
+                        onClick={() => setOutputFormat(fmt)}
+                        className={`rounded-lg px-2.5 py-1 font-mono text-xs font-bold uppercase transition-colors ${
+                          outputFormat === fmt
+                            ? 'bg-deep-burgundy text-cream-white shadow-xs'
+                            : 'text-[#231F20]/75 dark:text-cream-white/75 hover:text-[#231F20] dark:hover:text-cream-white'
+                        }`}
+                      >
+                        .{fmt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
+
+                <button
+                  type="button"
+                  aria-label={t.editor.exportButton}
+                  onClick={handleExport}
+                  disabled={!isWaveReady || isExporting}
+                  className="flex flex-1 min-h-[46px] w-full items-center justify-center gap-2 rounded-2xl bg-deep-burgundy hover:bg-burgundy-hover disabled:opacity-60 px-5 py-3 text-sm sm:text-base font-bold text-cream-white shadow-md transition-all duration-150 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-burgundy focus-visible:ring-offset-2"
+                >
+                  {isExporting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                      <span className="truncate text-xs sm:text-sm">
+                        {exportStage === 'loading-core'
+                          ? t.editor.loadingFfmpeg
+                          : `${t.editor.encodingProgress} (${exportProgress}%)`}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Download className="h-5 w-5" aria-hidden="true" />
+                      <span>{t.editor.exportButton}</span>
+                    </>
+                  )}
+                </button>
               </div>
-
-              {/* Primary Export Button (#790D16 Deep Burgundy) */}
-              <button
-                type="button"
-                aria-label={t.editor.exportButton}
-                onClick={handleExport}
-                disabled={!isWaveReady || isExporting}
-                className="mt-1 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-deep-burgundy hover:bg-burgundy-hover disabled:opacity-60 px-6 py-4 text-base font-bold text-cream-white shadow-md transition-all duration-150 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-burgundy focus-visible:ring-offset-2"
-              >
-                {isExporting ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
-                    <span>
-                      {exportStage === 'loading-core'
-                        ? t.editor.loadingFfmpeg
-                        : `${t.editor.encodingProgress} (${exportProgress}%)`}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Download className="h-5 w-5" aria-hidden="true" />
-                    <span>{t.editor.exportButton}</span>
-                  </>
-                )}
-              </button>
-
-              {exportSuccessMessage && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="flex items-start gap-2 rounded-xl bg-deep-burgundy/10 dark:bg-slate-blue/15 p-3 text-xs font-semibold text-deep-burgundy dark:text-slate-blue"
-                >
-                  <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" aria-hidden="true" />
-                  <span className="break-all">{exportSuccessMessage}</span>
-                </div>
-              )}
-
-              {errorMsg && (
-                <div
-                  role="alert"
-                  aria-live="assertive"
-                  className="rounded-xl bg-deep-burgundy/15 p-3 text-xs font-semibold text-deep-burgundy dark:text-cream-white"
-                >
-                  {errorMsg}
-                </div>
-              )}
             </div>
+
+            {exportSuccessMessage && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="mt-4 flex items-center gap-2 rounded-xl bg-deep-burgundy/10 dark:bg-slate-blue/15 px-4 py-3 text-xs font-semibold text-deep-burgundy dark:text-slate-blue"
+              >
+                <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="break-all">{exportSuccessMessage}</span>
+              </div>
+            )}
+
+            {errorMsg && (
+              <div
+                role="alert"
+                aria-live="assertive"
+                className="mt-4 rounded-xl bg-deep-burgundy/15 px-4 py-3 text-xs font-semibold text-deep-burgundy dark:text-cream-white"
+              >
+                {errorMsg}
+              </div>
+            )}
           </div>
         </div>
       )}

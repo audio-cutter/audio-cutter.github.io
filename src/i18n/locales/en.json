@@ -1,0 +1,113 @@
+{
+  "code": "en",
+  "badge": "US",
+  "label": "English",
+  "htmlLang": "en-US",
+  "seo": {
+    "title": "AudioCutter | Zero-Server Minimalist Audio Trimmer",
+    "description": "Trim, cut, and fade MP3, WAV, FLAC, and OGG audio files directly in your browser. 100% client-side processing with Wavesurfer.js and FFmpeg.wasm. Zero server uploads, complete privacy.",
+    "keywords": "audio cutter, online audio trimmer, cut mp3, trim wav, client-side audio editor, ffmpeg wasm audio cutter, privacy first audio trimmer, fade in fade out audio"
+  },
+  "nav": {
+    "tagline": "Zero-Server Audio Trimmer",
+    "languageAria": "Select Language",
+    "themeToggleAria": "Toggle Light/Dark Mode",
+    "supportText": "Support the Developer",
+    "supportAria": "Support the Developer on Buy Me a Coffee"
+  },
+  "hero": {
+    "privacyBadge": "100% Client-Side • Zero Server Uploads",
+    "title": "Minimalist Audio Trimmer",
+    "subtitle": "Visually slice, fine-tune, and apply smooth fades to your audio tracks directly in your browser memory."
+  },
+  "dropzone": {
+    "title": "Drop your audio file here",
+    "subtitle": "or click to browse from your device",
+    "browseButton": "Select Audio File",
+    "sampleButton": "Load Demo Track",
+    "GeneratingSample": "Synthesizing Demo...",
+    "formats": "Supports MP3, WAV, FLAC, OGG, M4A • Processed locally via WebAssembly",
+    "errorUnsupported": "Please select a valid audio file (MP3, WAV, FLAC, OGG, M4A, AAC)."
+  },
+  "editor": {
+    "replaceFile": "New File",
+    "playAll": "Play All",
+    "pause": "Pause",
+    "playRegion": "Preview Selection",
+    "loopRegion": "Loop Selection",
+    "resetRegion": "Reset Trim",
+    "zoom": "Zoom",
+    "cutFrom": "Cut From (Start)",
+    "cutTo": "To (End)",
+    "selectionLength": "Clip Duration",
+    "totalLength": "Original",
+    "fadeIn": "Fade In",
+    "fadeOut": "Fade Out",
+    "fadeSeconds": "1.5s smooth ramp",
+    "outputFormat": "Export Format",
+    "exportButton": "Export Audio",
+    "exportingButton": "Processing with FFmpeg...",
+    "loadingFfmpeg": "Initializing WebAssembly Engine...",
+    "encodingProgress": "Trimming & Encoding",
+    "exportSuccess": "Clip exported! Download started automatically.",
+    "dragHint": "Drag the burgundy handles on the waveform or type exact timestamps below.",
+    "fineTuneMinus": "Nudge -0.1s",
+    "fineTunePlus": "Nudge +0.1s",
+    "setAtCursor": "Set to Playhead",
+    "currentCursor": "Cursor"
+  },
+  "sections": {
+    "howItWorksTitle": "How It Works in 3 Steps",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Load Local Audio",
+        "description": "Drag and drop any MP3 or WAV file into the browser. Your file stays strictly in your device's RAM—nothing is ever uploaded."
+      },
+      {
+        "step": "02",
+        "title": "Select & Fine-Tune Region",
+        "description": "Drag the interactive waveform handles to frame your exact clip. Preview the loop and toggle optional Fade In or Fade Out ramps."
+      },
+      {
+        "step": "03",
+        "title": "Instant Wasm Export",
+        "description": "Click Export to slice and encode your audio using FFmpeg.wasm and Web Audio API with millisecond precision."
+      }
+    ],
+    "featuresTitle": "Engineered for Speed & Total Privacy",
+    "features": [
+      {
+        "title": "Zero Server Uploads",
+        "description": "All decoding, waveform rendering, and audio slicing happen 100% locally inside your browser sandbox."
+      },
+      {
+        "title": "Millisecond Precision",
+        "description": "Powered by Wavesurfer.js Regions and FFmpeg WebAssembly for frame-accurate start and end cuts."
+      },
+      {
+        "title": "Studio Fade Curves",
+        "description": "Apply clean logarithmic fade-in and fade-out transitions with a single checkbox toggle."
+      }
+    ],
+    "faqTitle": "Frequently Asked Questions",
+    "faqs": [
+      {
+        "q": "Are my audio files uploaded to any server?",
+        "a": "Never. AudioCutter runs entirely inside your web browser using the HTML5 File API, Wavesurfer.js, and FFmpeg.wasm. Your private recordings and music files never leave your computer or phone."
+      },
+      {
+        "q": "Which audio formats can I trim and export?",
+        "a": "You can load MP3, WAV, FLAC, OGG, M4A, and AAC files, and export your trimmed clip directly as a high-quality MP3 or uncompressed WAV file."
+      },
+      {
+        "q": "How do I make precise cuts on mobile or desktop?",
+        "a": "You can drag the start and end handles directly on the waveform, use the zoom controls to inspect transients, or type exact timestamps down to the hundredth of a second in the Cut From and To fields."
+      }
+    ]
+  },
+  "footer": {
+    "privacyNote": "100% Client-Side Audio Processing. Zero telemetry, zero cloud storage.",
+    "builtWith": "Powered by Astro, React, Wavesurfer.js & FFmpeg.wasm"
+  }
+}

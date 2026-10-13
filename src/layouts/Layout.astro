@@ -1,0 +1,274 @@
+---
+import '../styles/global.css';
+import {
+  SUPPORTED_LANGUAGES,
+  DEFAULT_LANGUAGE,
+  getLocalePath,
+  type LocaleCode,
+  type TranslationDictionary,
+} from '../i18n/translations';
+
+interface Props {
+  lang: LocaleCode;
+  t: TranslationDictionary;
+}
+
+const { lang, t } = Astro.props;
+const siteOrigin = 'https://audio-cutter.github.io';
+const canonicalUrl = `${siteOrigin}${getLocalePath(lang)}`;
+const ogImageUrl = `${siteOrigin}/og-image.png`;
+
+const breadcrumbItems =
+  lang === DEFAULT_LANGUAGE
+    ? [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: `${siteOrigin}/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: t.hero.title,
+          item: `${siteOrigin}/#workspace`,
+        },
+      ]
+    : [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'AudioCutter',
+          item: `${siteOrigin}/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: `${t.label} — ${t.hero.title}`,
+          item: canonicalUrl,
+        },
+      ];
+
+const structuredDataGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${siteOrigin}/#organization`,
+      name: 'AudioCutter',
+      url: `${siteOrigin}/`,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteOrigin}/apple-touch-icon.png`,
+        width: 180,
+        height: 180,
+      },
+      sameAs: ['https://buymeacoffee.com/kisharadilz'],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteOrigin}/#website`,
+      url: `${siteOrigin}/`,
+      name: 'AudioCutter',
+      description: t.seo.description,
+      inLanguage: t.htmlLang,
+      publisher: {
+        '@id': `${siteOrigin}/#organization`,
+      },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonicalUrl}#webpage`,
+      url: canonicalUrl,
+      name: t.seo.title,
+      description: t.seo.description,
+      inLanguage: t.htmlLang,
+      isPartOf: {
+        '@id': `${siteOrigin}/#website`,
+      },
+      breadcrumb: {
+        '@id': `${canonicalUrl}#breadcrumb`,
+      },
+      mainEntity: {
+        '@id': `${canonicalUrl}#webapp`,
+      },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${canonicalUrl}#breadcrumb`,
+      itemListElement: breadcrumbItems,
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonicalUrl}#webapp`,
+      name: 'AudioCutter',
+      headline: t.seo.title,
+      url: canonicalUrl,
+      applicationCategory: 'MultimediaApplication',
+      applicationSubCategory: 'Audio Editor & Trimmer',
+      operatingSystem: 'All (Web Browser via WebAssembly)',
+      browserRequirements: 'Requires HTML5 File API, Web Audio API, and WebAssembly',
+      isAccessibleForFree: true,
+      inLanguage: t.htmlLang,
+      description: t.seo.description,
+      image: ogImageUrl,
+      screenshot: ogImageUrl,
+      author: {
+        '@id': `${siteOrigin}/#organization`,
+      },
+      offers: {
+        '@type': 'Offer',
+        price: '0.00',
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+      },
+      featureList: [
+        '100% Client-Side Audio Trimming',
+        'Interactive Waveform with Wavesurfer.js Regions',
+        'FFmpeg.wasm In-Browser Audio Slicing & Encoding',
+        'Fade In and Fade Out Audio Transitions',
+        'Zero Server Uploads & Complete Privacy',
+      ],
+    },
+    {
+      '@type': 'HowTo',
+      '@id': `${canonicalUrl}#howto`,
+      name: t.sections.howItWorksTitle,
+      description: t.hero.subtitle,
+      totalTime: 'PT1M',
+      step: t.sections.steps.map((s, idx) => ({
+        '@type': 'HowToStep',
+        position: idx + 1,
+        name: s.title,
+        text: s.description,
+        url: `${canonicalUrl}#step-${idx + 1}`,
+      })),
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${canonicalUrl}#faq`,
+      mainEntity: t.sections.faqs.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.a,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={t.htmlLang}>
+  <head>
+    <!-- Resource Hints for Core Web Vitals & Performance -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-65F0FQ5HF4"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-65F0FQ5HF4');
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{t.seo.title}</title>
+    <meta name="description" content={t.seo.description} />
+    <meta name="keywords" content={t.seo.keywords} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="AudioCutter" />
+    <meta name="application-name" content="AudioCutter" />
+    <meta name="theme-color" content="#790D16" />
+
+    <!-- Canonical & Internationalization Hreflang Tags -->
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={`${siteOrigin}/`} />
+    {
+      SUPPORTED_LANGUAGES.map((localeItem) => (
+        <>
+          <link
+            rel="alternate"
+            hreflang={localeItem.code}
+            href={`${siteOrigin}${getLocalePath(localeItem.code)}`}
+          />
+          <link
+            rel="alternate"
+            hreflang={localeItem.htmlLang.toLowerCase()}
+            href={`${siteOrigin}${getLocalePath(localeItem.code)}`}
+          />
+        </>
+      ))
+    }
+
+    <!-- Icons & PWA Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph / Social Meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AudioCutter" />
+    <meta property="og:title" content={t.seo.title} />
+    <meta property="og:description" content={t.seo.description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={t.htmlLang.replace('-', '_')} />
+    {
+      SUPPORTED_LANGUAGES.filter((l) => l.code !== lang).map((altLocale) => (
+        <meta property="og:locale:alternate" content={altLocale.htmlLang.replace('-', '_')} />
+      ))
+    }
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.seo.title} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={t.seo.title} />
+    <meta name="twitter:description" content={t.seo.description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={t.seo.title} />
+
+    <!-- JSON-LD Technical SEO Unified Graph (Organization, WebSite, WebPage, BreadcrumbList, WebApplication, HowTo, FAQPage) -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredDataGraph)} />
+
+    <!-- Instant Theme Hydration (Default: Clean Light Theme #F5EFE1) -->
+    <script is:inline>
+      (function () {
+        try {
+          const saved = localStorage.getItem('audiocutter-theme');
+          if (saved === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (_) {}
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-cream-white dark:bg-charcoal text-[#231F20] dark:text-cream-white">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-xl focus:bg-deep-burgundy focus:px-4 focus:py-2.5 focus:text-sm focus:font-bold focus:text-cream-white focus:shadow-lg"
+    >
+      Skip to main content
+    </a>
+    <slot />
+  </body>
+</html>

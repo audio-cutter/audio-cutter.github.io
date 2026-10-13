@@ -1,0 +1,70 @@
+---
+import { SUPPORTED_LANGUAGES, getLocalePath, type LocaleCode, type TranslationDictionary } from '../i18n/translations';
+
+interface Props {
+  lang: LocaleCode;
+  t: TranslationDictionary;
+}
+
+const { lang, t } = Astro.props;
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="mt-20 border-t border-tan-beige dark:border-charcoal-border bg-tan-beige/35 dark:bg-charcoal-surface/70 py-10">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
+      <div class="text-center sm:text-left">
+        <div class="flex items-center justify-center sm:justify-start gap-2">
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-deep-burgundy text-cream-white">
+            <svg width="16" height="16" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 12h2" />
+              <path d="M6 8v8" />
+              <path d="M10 4v16" />
+              <path d="M14 7v10" />
+              <path d="M18 9v6" />
+              <path d="M22 12h-2" />
+            </svg>
+          </span>
+          <span class="font-bold tracking-tight text-[#231F20] dark:text-cream-white">
+            Audio<span class="text-deep-burgundy dark:text-slate-blue">Cutter</span>
+          </span>
+        </div>
+        <p class="mt-2 text-xs text-[#231F20]/70 dark:text-cream-white/65">
+          {t.footer.privacyNote}
+        </p>
+      </div>
+
+      <!-- Quick Language Links for SEO crawlability -->
+      <nav aria-label="Language Switcher Footer" class="flex flex-wrap items-center justify-center gap-2">
+        {SUPPORTED_LANGUAGES.map((item) => (
+          <a
+            href={getLocalePath(item.code)}
+            aria-label={`Switch language to ${item.label}`}
+            aria-current={item.code === lang ? 'page' : undefined}
+            class:list={[
+              'rounded-lg px-2.5 py-1 text-xs font-medium transition-colors',
+              item.code === lang
+                ? 'bg-deep-burgundy text-cream-white font-semibold'
+                : 'bg-tan-beige/65 dark:bg-charcoal-elevated text-[#231F20]/80 dark:text-cream-white/75 hover:bg-tan-beige',
+            ]}
+          >
+            {item.badge} · {item.label}
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <div class="mt-8 flex flex-col items-center justify-between gap-3 border-t border-tan-beige/70 dark:border-charcoal-border pt-6 text-xs text-[#231F20]/60 dark:text-cream-white/55 sm:flex-row">
+      <p>© {currentYear} AudioCutter (audio-cutter.github.io). {t.footer.builtWith}.</p>
+      <a
+        href="https://buymeacoffee.com/kisharadilz"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t.nav.supportAria}
+        class="inline-flex items-center gap-1.5 font-semibold text-deep-burgundy dark:text-slate-blue hover:underline"
+      >
+        <span>☕ {t.nav.supportText}</span>
+      </a>
+    </div>
+  </div>
+</footer>

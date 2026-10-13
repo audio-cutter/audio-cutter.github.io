@@ -1,0 +1,22 @@
+{
+  "name": "AudioCutter | Zero-Server Minimalist Audio Trimmer",
+  "short_name": "AudioCutter",
+  "description": "Trim, cut, and fade MP3, WAV, FLAC, and OGG audio files directly in your browser with Wavesurfer.js and FFmpeg.wasm.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5EFE1",
+  "theme_color": "#790D16",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

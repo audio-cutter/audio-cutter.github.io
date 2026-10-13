@@ -1,0 +1,113 @@
+{
+  "code": "ja",
+  "badge": "JP",
+  "label": "日本語",
+  "htmlLang": "ja-JP",
+  "seo": {
+    "title": "AudioCutter | サーバー不要のミニマル音声トリミングツール",
+    "description": "ブラウザ上でMP3、WAV、FLAC、OGG音声ファイルを視覚的にカット＆フェード加工。Wavesurfer.jsとFFmpeg.wasmによる100%クライアントサイド処理で完全なプライバシーを保護。",
+    "keywords": "オーディオカッター, 音声カット オンライン, mp3 カット, wav トリミング, ブラウザ 音声編集, ffmpeg wasm, プライバシー"
+  },
+  "nav": {
+    "tagline": "サーバー不要の音声カッター",
+    "languageAria": "言語を選択",
+    "themeToggleAria": "ライト/ダークモード切替",
+    "supportText": "開発者を支援",
+    "supportAria": "Buy Me a Coffeeで開発者をサポート"
+  },
+  "hero": {
+    "privacyBadge": "100% ブラウザ内処理 • サーバー送信ゼロ",
+    "title": "ミニマル音声トリマー",
+    "subtitle": "ブラウザのメモリ上で波形を見ながら直感的にオーディオをカットし、滑らかなフェード効果を適用できます。"
+  },
+  "dropzone": {
+    "title": "ここに音声ファイルをドロップ",
+    "subtitle": "またはクリックして端末からファイルを選択",
+    "browseButton": "音声ファイルを選択",
+    "sampleButton": "デモ音源を読み込む",
+    "GeneratingSample": "デモ音源を生成中...",
+    "formats": "MP3, WAV, FLAC, OGG, M4A対応 • WebAssemblyによるローカル処理",
+    "errorUnsupported": "有効な音声ファイル（MP3, WAV, FLAC, OGG, M4A, AAC）を選択してください。"
+  },
+  "editor": {
+    "replaceFile": "別のファイル",
+    "playAll": "全体再生",
+    "pause": "一時停止",
+    "playRegion": "選択範囲を再生",
+    "loopRegion": "ループ再生",
+    "resetRegion": "範囲リセット",
+    "zoom": "ズーム",
+    "cutFrom": "開始位置 (Cut From)",
+    "cutTo": "終了位置 (To)",
+    "selectionLength": "切り抜き時間",
+    "totalLength": "元の長さ",
+    "fadeIn": "フェードイン",
+    "fadeOut": "フェードアウト",
+    "fadeSeconds": "1.5秒の滑らかなフェード",
+    "outputFormat": "出力フォーマット",
+    "exportButton": "音声を書き出す",
+    "exportingButton": "FFmpegで処理中...",
+    "loadingFfmpeg": "WebAssemblyエンジンを起動中...",
+    "encodingProgress": "トリミング＆エンコード中",
+    "exportSuccess": "書き出し完了！ダウンロードが自動的に開始されました。",
+    "dragHint": "波形上のバーガンディ色のハンドルをドラッグするか、下で正確な秒数を指定してください。",
+    "fineTuneMinus": "-0.1秒 微調整",
+    "fineTunePlus": "+0.1秒 微調整",
+    "setAtCursor": "再生位置に合わせる",
+    "currentCursor": "カーソル"
+  },
+  "sections": {
+    "howItWorksTitle": "使い方はシンプルな3ステップ",
+    "steps": [
+      {
+        "step": "01",
+        "title": "音声ファイルを読み込む",
+        "description": "MP3やWAVファイルをブラウザにドラッグ＆ドロップします。ファイルはお使いの端末のメモリ内でのみ処理され、外部へアップロードされません。"
+      },
+      {
+        "step": "02",
+        "title": "波形から範囲を選択",
+        "description": "インタラクティブな波形のハンドルを動かして切り抜きたい範囲を指定します。フェードイン・フェードアウトもワンクリックで設定可能です。"
+      },
+      {
+        "step": "03",
+        "title": "Wasmで即座に書き出し",
+        "description": "「音声を書き出す」をクリックすると、FFmpeg.wasmがミリ秒単位の精度で音声を切り出し、即座に保存します。"
+      }
+    ],
+    "featuresTitle": "圧倒的な軽快さと完全なプライバシー保護",
+    "features": [
+      {
+        "title": "サーバーアップロード一切なし",
+        "description": "音声のデコード、波形描画、カット処理のすべてがお使いのブラウザ内で100%完結します。"
+      },
+      {
+        "title": "ミリ秒単位の精密カット",
+        "description": "Wavesurfer.js RegionsとFFmpeg WebAssemblyにより、0.01秒単位での正確なトリミングが可能です。"
+      },
+      {
+        "title": "自然なフェード処理",
+        "description": "チェックボックスをオンにするだけで、曲の始まりと終わりに滑らかなフェード効果を適用できます。"
+      }
+    ],
+    "faqTitle": "よくある質問 (FAQ)",
+    "faqs": [
+      {
+        "q": "音声ファイルがサーバーにアップロードされることはありますか？",
+        "a": "一切ありません。AudioCutterはHTML5 File API、Wavesurfer.js、FFmpeg.wasmを使用してブラウザ内部でのみ動作します。プライベートな録音データが端末の外に出ることはありません。"
+      },
+      {
+        "q": "どの音声フォーマットに対応していますか？",
+        "a": "MP3、WAV、FLAC、OGG、M4A、AACファイルを読み込み、高音質なMP3または無圧縮WAVとして書き出すことができます。"
+      },
+      {
+        "q": "スマートフォンやPCで細かく位置を調整するには？",
+        "a": "波形上のハンドルを直接ドラッグするほか、ズーム機能や開始・終了タイムスタンプの数値入力・微調整ボタンで精密に指定できます。"
+      }
+    ]
+  },
+  "footer": {
+    "privacyNote": "100% クライアントサイド音声処理。テレメトリなし、クラウド保存なし。",
+    "builtWith": "Powered by Astro, React, Wavesurfer.js & FFmpeg.wasm"
+  }
+}

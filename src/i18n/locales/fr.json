@@ -1,0 +1,113 @@
+{
+  "code": "fr",
+  "badge": "FR",
+  "label": "Français",
+  "htmlLang": "fr-FR",
+  "seo": {
+    "title": "AudioCutter | Découpeur Audio Minimaliste Sans Serveur",
+    "description": "Coupez, rognez et appliquez des fondus à vos fichiers audio MP3, WAV, FLAC et OGG directement dans votre navigateur. 100% côté client avec Wavesurfer.js et FFmpeg.wasm.",
+    "keywords": "couper audio, découpeur mp3 en ligne, rogner wav, éditeur audio navigateur, ffmpeg wasm, confidentialité audio"
+  },
+  "nav": {
+    "tagline": "Découpeur Audio Sans Serveur",
+    "languageAria": "Choisir la langue",
+    "themeToggleAria": "Basculer le thème clair/sombre",
+    "supportText": "Soutenir le Développeur",
+    "supportAria": "Soutenir le développeur sur Buy Me a Coffee"
+  },
+  "hero": {
+    "privacyBadge": "100% Côté Client • Aucun Envoi sur Serveur",
+    "title": "Découpeur Audio Minimaliste",
+    "subtitle": "Découpez visuellement, ajustez avec précision et appliquez des fondus fluides à vos pistes audio directement dans la mémoire de votre navigateur."
+  },
+  "dropzone": {
+    "title": "Déposez votre fichier audio ici",
+    "subtitle": "ou cliquez pour parcourir votre appareil",
+    "browseButton": "Sélectionner un Fichier Audio",
+    "sampleButton": "Charger une Piste Démo",
+    "GeneratingSample": "Génération de la démo...",
+    "formats": "Prend en charge MP3, WAV, FLAC, OGG, M4A • Traité localement via WebAssembly",
+    "errorUnsupported": "Veuillez sélectionner un fichier audio valide (MP3, WAV, FLAC, OGG, M4A, AAC)."
+  },
+  "editor": {
+    "replaceFile": "Nouveau Fichier",
+    "playAll": "Tout Lire",
+    "pause": "Pause",
+    "playRegion": "Écouter la Sélection",
+    "loopRegion": "Boucler la Sélection",
+    "resetRegion": "Réinitialiser",
+    "zoom": "Zoom",
+    "cutFrom": "Couper De (Début)",
+    "cutTo": "À (Fin)",
+    "selectionLength": "Durée de l'Extrait",
+    "totalLength": "Original",
+    "fadeIn": "Fondu d'Entrée (Fade In)",
+    "fadeOut": "Fondu de Sortie (Fade Out)",
+    "fadeSeconds": "Transition douce de 1,5s",
+    "outputFormat": "Format d'Export",
+    "exportButton": "Exporter l'Audio",
+    "exportingButton": "Traitement FFmpeg...",
+    "loadingFfmpeg": "Initialisation du moteur WebAssembly...",
+    "encodingProgress": "Découpage et Encodage",
+    "exportSuccess": "Extrait exporté ! Le téléchargement a démarré automatiquement.",
+    "dragHint": "Faites glisser les poignées bordeaux sur la forme d'onde ou saisissez les temps exacts ci-dessous.",
+    "fineTuneMinus": "Ajuster -0,1s",
+    "fineTunePlus": "Ajuster +0,1s",
+    "setAtCursor": "Définir au Curseur",
+    "currentCursor": "Curseur"
+  },
+  "sections": {
+    "howItWorksTitle": "Comment ça Marche en 3 Étapes",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Chargez l'Audio Local",
+        "description": "Glissez-déposez n'importe quel fichier MP3 ou WAV dans le navigateur. Votre fichier reste strictement dans la mémoire vive de votre appareil."
+      },
+      {
+        "step": "02",
+        "title": "Sélectionnez et Ajustez la Zone",
+        "description": "Déplacez les poignées interactives de la forme d'onde pour cadrer votre extrait. Activez les fondus d'entrée ou de sortie en un clic."
+      },
+      {
+        "step": "03",
+        "title": "Export Wasm Instantané",
+        "description": "Cliquez sur Exporter pour découper et encoder votre audio via FFmpeg.wasm avec une précision à la milliseconde."
+      }
+    ],
+    "featuresTitle": "Conçu pour la Vitesse et la Confidentialité Totale",
+    "features": [
+      {
+        "title": "Zéro Envoi Serveur",
+        "description": "Le décodage, l'affichage de la forme d'onde et le découpage s'effectuent à 100% localement dans votre navigateur."
+      },
+      {
+        "title": "Précision à la Milliseconde",
+        "description": "Propulsé par Wavesurfer.js Regions et FFmpeg WebAssembly pour des coupes d'une précision chirurgicale."
+      },
+      {
+        "title": "Courbes de Fondu Studio",
+        "description": "Appliquez des transitions de fondu d'entrée et de sortie fluides d'une simple case à cocher."
+      }
+    ],
+    "faqTitle": "Questions Fréquentes",
+    "faqs": [
+      {
+        "q": "Mes fichiers audio sont-ils envoyés sur un serveur ?",
+        "a": "Jamais. AudioCutter fonctionne entièrement dans votre navigateur grâce à l'API File HTML5, Wavesurfer.js et FFmpeg.wasm. Vos fichiers ne quittent jamais votre appareil."
+      },
+      {
+        "q": "Quels formats audio puis-je découper et exporter ?",
+        "a": "Vous pouvez importer des fichiers MP3, WAV, FLAC, OGG, M4A et AAC, et exporter votre extrait directement en MP3 ou WAV."
+      },
+      {
+        "q": "Comment effectuer des coupes précises sur mobile ou ordinateur ?",
+        "a": "Faites glisser les poignées sur la forme d'onde, utilisez le zoom ou entrez les horodatages exacts au centième de seconde près."
+      }
+    ]
+  },
+  "footer": {
+    "privacyNote": "Traitement audio 100% côté client. Zéro télémétrie, zéro stockage cloud.",
+    "builtWith": "Propulsé par Astro, React, Wavesurfer.js & FFmpeg.wasm"
+  }
+}

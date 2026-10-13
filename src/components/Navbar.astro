@@ -1,0 +1,221 @@
+---
+import { SUPPORTED_LANGUAGES, getLocalePath, type LocaleCode, type TranslationDictionary } from '../i18n/translations';
+
+interface Props {
+  lang: LocaleCode;
+  t: TranslationDictionary;
+}
+
+const { lang, t } = Astro.props;
+const currentLangObj = SUPPORTED_LANGUAGES.find((l) => l.code === lang) || SUPPORTED_LANGUAGES[0];
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-tan-beige/80 dark:border-charcoal-border bg-cream-white/90 dark:bg-charcoal/90 backdrop-blur-md transition-colors duration-200">
+  <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6" aria-label="Main Navigation">
+    <!-- Brand Logo (Collapses to pure icon on mobile/tablet) -->
+    <a
+      href={getLocalePath(lang)}
+      class="group flex items-center gap-2.5 rounded-xl py-1.5 pr-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-burgundy"
+      aria-label="AudioCutter Home"
+    >
+      <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-deep-burgundy text-cream-white shadow-sm transition-transform duration-200 group-hover:scale-105">
+        <!-- Audio Waveform + Scissors Minimalist Icon -->
+        <svg width="20" height="20" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 12h2" />
+          <path d="M6 8v8" />
+          <path d="M10 4v16" />
+          <path d="M14 7v10" />
+          <path d="M18 9v6" />
+          <path d="M22 12h-2" />
+        </svg>
+      </div>
+      <div class="hidden lg:flex lg:flex-col">
+        <span class="text-base font-bold tracking-tight text-[#231F20] dark:text-cream-white leading-none">
+          Audio<span class="text-deep-burgundy dark:text-slate-blue">Cutter</span>
+        </span>
+        <span class="mt-0.5 text-[11px] font-medium text-[#231F20]/65 dark:text-cream-white/60">
+          {t.nav.tagline}
+        </span>
+      </div>
+    </a>
+
+    <!-- Right Controls: 7-Language Dropdown, Theme Switcher, Support CTA -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- 7-Language Selector Dropdown -->
+      <div class="relative" id="lang-dropdown-wrapper">
+        <button
+          type="button"
+          id="lang-dropdown-btn"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="lang-dropdown-menu"
+          aria-label={t.nav.languageAria}
+          title={t.nav.languageAria}
+          class="flex h-10 items-center justify-center gap-2 rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/55 dark:bg-charcoal-surface px-2.5 lg:px-3.5 text-sm font-medium text-[#231F20] dark:text-cream-white hover:bg-tan-beige dark:hover:bg-charcoal-elevated transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-burgundy"
+        >
+          <!-- Globe Icon -->
+          <svg width="16" height="16" class="h-4 w-4 shrink-0 text-deep-burgundy dark:text-slate-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+            <path d="M2 12h20" />
+          </svg>
+          <!-- Desktop-only Badge + Label (strictly hidden on mobile/tablet) -->
+          <span class="hidden lg:inline-flex items-center gap-1.5">
+            <span class="rounded bg-deep-burgundy/10 dark:bg-slate-blue/15 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-deep-burgundy dark:text-slate-blue">
+              {currentLangObj.badge}
+            </span>
+            <span>{currentLangObj.label}</span>
+          </span>
+          <svg width="14" height="14" class="hidden lg:block h-3.5 w-3.5 opacity-60 transition-transform duration-150" id="lang-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+          id="lang-dropdown-menu"
+          role="menu"
+          aria-label={t.nav.languageAria}
+          aria-orientation="vertical"
+          class="invisible opacity-0 scale-95 pointer-events-none absolute right-0 mt-2 w-48 origin-top-right rounded-2xl border border-tan-beige dark:border-charcoal-border bg-cream-white dark:bg-charcoal-surface p-1.5 shadow-xl transition-all duration-150 z-50"
+        >
+          {SUPPORTED_LANGUAGES.map((item) => {
+            const isActive = item.code === lang;
+            return (
+              <a
+                href={getLocalePath(item.code)}
+                role="menuitem"
+                aria-label={`${item.label} (${item.badge})`}
+                class:list={[
+                  'flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-deep-burgundy text-cream-white'
+                    : 'text-[#231F20] dark:text-cream-white hover:bg-tan-beige/70 dark:hover:bg-charcoal-elevated',
+                ]}
+              >
+                <span class="flex items-center gap-2.5">
+                  <span
+                    class:list={[
+                      'inline-flex w-7 justify-center rounded px-1 py-0.5 font-mono text-[11px] font-bold',
+                      isActive
+                        ? 'bg-cream-white/20 text-cream-white'
+                        : 'bg-tan-beige dark:bg-charcoal-elevated text-deep-burgundy dark:text-slate-blue',
+                    ]}
+                  >
+                    {item.badge}
+                  </span>
+                  <span>{item.label}</span>
+                </span>
+                {isActive && (
+                  <svg width="16" height="16" class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- Light / Dark Mode Switcher (Icon-Only) -->
+      <button
+        type="button"
+        id="theme-toggle-btn"
+        aria-label={t.nav.themeToggleAria}
+        title={t.nav.themeToggleAria}
+        class="flex h-10 w-10 items-center justify-center rounded-xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/55 dark:bg-charcoal-surface text-[#231F20] dark:text-cream-white hover:bg-tan-beige dark:hover:bg-charcoal-elevated transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-burgundy"
+      >
+        <!-- Sun Icon (shown in dark mode) -->
+        <svg width="16" height="16" id="theme-icon-sun" class="hidden dark:block h-4 w-4 text-tan-beige" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m6.34 17.66-1.41 1.41" />
+          <path d="m19.07 4.93-1.41 1.41" />
+        </svg>
+        <!-- Moon Icon (shown in light mode) -->
+        <svg width="16" height="16" id="theme-icon-moon" class="block dark:hidden h-4 w-4 text-deep-burgundy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </svg>
+      </button>
+
+      <!-- Support the Developer CTA (Collapses to pure icon on mobile/tablet) -->
+      <a
+        href="https://buymeacoffee.com/kisharadilz"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t.nav.supportAria}
+        title={t.nav.supportText}
+        class="flex h-10 items-center justify-center gap-2 rounded-xl bg-deep-burgundy hover:bg-burgundy-hover px-3 lg:px-4 text-sm font-semibold text-cream-white shadow-sm transition-all duration-150 hover:shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-burgundy focus-visible:ring-offset-2"
+      >
+        <!-- Coffee Cup Icon -->
+        <svg width="16" height="16" class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10 2v2" />
+          <path d="M14 2v2" />
+          <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" />
+          <path d="M6 2v2" />
+        </svg>
+        <span class="hidden lg:inline">{t.nav.supportText}</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  function setupNavbar() {
+    const langBtn = document.getElementById('lang-dropdown-btn');
+    const langMenu = document.getElementById('lang-dropdown-menu');
+    const langChevron = document.getElementById('lang-chevron');
+    const langWrapper = document.getElementById('lang-dropdown-wrapper');
+    const themeBtn = document.getElementById('theme-toggle-btn');
+
+    let isOpen = false;
+
+    function toggleLangMenu(forceState?: boolean) {
+      isOpen = typeof forceState === 'boolean' ? forceState : !isOpen;
+      if (!langBtn || !langMenu) return;
+
+      langBtn.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) {
+        langMenu.classList.remove('invisible', 'opacity-0', 'scale-95', 'pointer-events-none');
+        langMenu.classList.add('visible', 'opacity-100', 'scale-100', 'pointer-events-auto');
+        langChevron?.classList.add('rotate-180');
+      } else {
+        langMenu.classList.add('invisible', 'opacity-0', 'scale-95', 'pointer-events-none');
+        langMenu.classList.remove('visible', 'opacity-100', 'scale-100', 'pointer-events-auto');
+        langChevron?.classList.remove('rotate-180');
+      }
+    }
+
+    langBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleLangMenu();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (isOpen && langWrapper && !langWrapper.contains(e.target as Node)) {
+        toggleLangMenu(false);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        toggleLangMenu(false);
+      }
+    });
+
+    themeBtn?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      localStorage.setItem('audiocutter-theme', isDark ? 'dark' : 'light');
+      window.dispatchEvent(new CustomEvent('audiocutter-theme-change', { detail: { isDark } }));
+    });
+  }
+
+  setupNavbar();
+  document.addEventListener('astro:after-swap', setupNavbar);
+</script>

@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MainPageContent from '../../components/MainPageContent.astro';
+import {
+  SUPPORTED_LANGUAGES,
+  DEFAULT_LANGUAGE,
+  getDictionary,
+  type LocaleCode,
+} from '../../i18n/translations';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGUAGES.filter((l) => l.code !== DEFAULT_LANGUAGE).map((l) => ({
+    params: { lang: l.code },
+  }));
+}
+
+const { lang } = Astro.params as { lang: LocaleCode };
+const t = getDictionary(lang);
+---
+
+<Layout lang={lang} t={t}>
+  <MainPageContent lang={lang} t={t} />
+</Layout>

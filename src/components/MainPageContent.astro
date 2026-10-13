@@ -1,0 +1,179 @@
+---
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import AudioEditor from './AudioEditor';
+import { DEFAULT_LANGUAGE, getLocalePath, type LocaleCode, type TranslationDictionary } from '../i18n/translations';
+
+interface Props {
+  lang: LocaleCode;
+  t: TranslationDictionary;
+}
+
+const { lang, t } = Astro.props;
+const siteOrigin = 'https://audio-cutter.github.io';
+const currentPath = getLocalePath(lang);
+---
+
+<div class="flex min-h-screen flex-col">
+  <Navbar lang={lang} t={t} />
+
+  <main id="main-content" class="mx-auto w-full max-w-6xl flex-1 px-4 pt-6 pb-12 sm:px-6 sm:pt-10">
+    <!-- Minimalist Semantic Breadcrumb Navigation (HTML + Microdata + JSON-LD Backed) -->
+    <nav aria-label="Breadcrumb" class="mb-6 flex items-center justify-center">
+      <ol
+        itemscope
+        itemtype="https://schema.org/BreadcrumbList"
+        class="inline-flex flex-wrap items-center gap-1.5 rounded-full border border-tan-beige dark:border-charcoal-border bg-tan-beige/45 dark:bg-charcoal-surface px-3.5 py-1 text-xs font-medium text-[#231F20]/75 dark:text-cream-white/75"
+      >
+        <li
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+          class="inline-flex items-center gap-1.5"
+        >
+          <a
+            itemprop="item"
+            href="/"
+            aria-label="AudioCutter Home"
+            class="font-semibold text-deep-burgundy dark:text-slate-blue hover:underline"
+          >
+            <span itemprop="name">AudioCutter</span>
+          </a>
+          <meta itemprop="position" content="1" />
+        </li>
+
+        <li aria-hidden="true" class="text-[#231F20]/40 dark:text-cream-white/40">/</li>
+
+        <li
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+          class="inline-flex items-center"
+        >
+          <a
+            itemprop="item"
+            href={lang === DEFAULT_LANGUAGE ? '/#workspace' : currentPath}
+            aria-current="page"
+            class="font-semibold text-[#231F20] dark:text-cream-white"
+          >
+            <span itemprop="name">
+              {lang === DEFAULT_LANGUAGE ? t.hero.title : `${t.label} (${t.badge})`}
+            </span>
+          </a>
+          <meta itemprop="position" content="2" />
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Minimalist Hero Header -->
+    <section id="hero" aria-labelledby="hero-heading" class="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
+      <h1 id="hero-heading" class="text-3xl font-extrabold tracking-tight text-[#231F20] dark:text-cream-white sm:text-5xl">
+        {t.hero.title}
+      </h1>
+      <p class="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-[#231F20]/75 dark:text-cream-white/70 leading-relaxed">
+        {t.hero.subtitle}
+      </p>
+    </section>
+
+    <!-- Core React Island: Wavesurfer.js + Regions + FFmpeg.wasm -->
+    <section id="workspace" aria-label="Audio Trimmer Workspace" class="mb-16">
+      <AudioEditor client:load t={t} />
+    </section>
+
+    <!-- How It Works Section -->
+    <section
+      id="how-it-works"
+      aria-labelledby="how-it-works-heading"
+      class="mt-16 border-t border-tan-beige dark:border-charcoal-border pt-14"
+    >
+      <h2
+        id="how-it-works-heading"
+        class="text-center text-xl font-bold tracking-tight text-[#231F20] dark:text-cream-white sm:text-2xl"
+      >
+        {t.sections.howItWorksTitle}
+      </h2>
+
+      <ol class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3 list-none p-0">
+        {t.sections.steps.map((item, idx) => (
+          <li
+            id={`step-${idx + 1}`}
+            class="rounded-2xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/45 dark:bg-charcoal-surface p-6 transition-transform duration-150 hover:-translate-y-0.5"
+          >
+            <span
+              aria-hidden="true"
+              class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-deep-burgundy font-mono text-xs font-bold text-cream-white"
+            >
+              {item.step}
+            </span>
+            <h3 class="mt-4 text-base font-bold text-[#231F20] dark:text-cream-white">
+              {item.title}
+            </h3>
+            <p class="mt-2 text-sm text-[#231F20]/75 dark:text-cream-white/70 leading-relaxed">
+              {item.description}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- Key Architectural Features Section -->
+    <section id="features" aria-labelledby="features-heading" class="mt-16">
+      <div class="rounded-3xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/55 dark:bg-charcoal-surface p-6 sm:p-10">
+        <h2
+          id="features-heading"
+          class="text-center text-xl font-bold tracking-tight text-[#231F20] dark:text-cream-white sm:text-2xl"
+        >
+          {t.sections.featuresTitle}
+        </h2>
+
+        <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {t.sections.features.map((feat) => (
+            <article class="rounded-2xl bg-cream-white dark:bg-charcoal p-5 border border-tan-beige/80 dark:border-charcoal-border">
+              <div class="mb-3 h-1.5 w-10 rounded-full bg-deep-burgundy dark:bg-slate-blue" aria-hidden="true" />
+              <h3 class="text-base font-bold text-[#231F20] dark:text-cream-white">
+                {feat.title}
+              </h3>
+              <p class="mt-1.5 text-sm text-[#231F20]/70 dark:text-cream-white/70 leading-relaxed">
+                {feat.description}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section for Users & Structured SEO -->
+    <section id="faq" aria-labelledby="faq-heading" class="mx-auto mt-16 max-w-3xl">
+      <h2
+        id="faq-heading"
+        class="text-center text-xl font-bold tracking-tight text-[#231F20] dark:text-cream-white sm:text-2xl"
+      >
+        {t.sections.faqTitle}
+      </h2>
+
+      <div class="mt-6 space-y-3.5">
+        {t.sections.faqs.map((faq) => (
+          <details class="group rounded-2xl border border-tan-beige dark:border-charcoal-border bg-tan-beige/40 dark:bg-charcoal-surface p-5">
+            <summary
+              aria-label={faq.q}
+              class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-sm sm:text-base text-[#231F20] dark:text-cream-white"
+            >
+              <span>{faq.q}</span>
+              <span
+                aria-hidden="true"
+                class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-deep-burgundy/10 dark:bg-slate-blue/15 text-deep-burgundy dark:text-slate-blue transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
+            </summary>
+            <p class="mt-3 text-sm text-[#231F20]/75 dark:text-cream-white/70 leading-relaxed">
+              {faq.a}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer lang={lang} t={t} />
+</div>

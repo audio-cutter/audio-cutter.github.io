@@ -1,0 +1,113 @@
+{
+  "code": "de",
+  "badge": "DE",
+  "label": "Deutsch",
+  "htmlLang": "de-DE",
+  "seo": {
+    "title": "AudioCutter | Minimalistischer Client-Seitiger Audio-Trimmer",
+    "description": "MP3-, WAV-, FLAC- und OGG-Audiodateien direkt im Browser schneiden und ein-/ausblenden. 100% lokale Verarbeitung mit Wavesurfer.js und FFmpeg.wasm ohne Server-Upload.",
+    "keywords": "audio schneiden, mp3 schneiden online, wav kürzen, audio trimmer browser, ffmpeg wasm, datenschutz audio editor"
+  },
+  "nav": {
+    "tagline": "Serverloser Audio-Trimmer",
+    "languageAria": "Sprache auswählen",
+    "themeToggleAria": "Helles/Dunkles Design umschalten",
+    "supportText": "Entwickler unterstützen",
+    "supportAria": "Unterstütze den Entwickler auf Buy Me a Coffee"
+  },
+  "hero": {
+    "privacyBadge": "100% Client-Seitig • Keine Server-Uploads",
+    "title": "Minimalistischer Audio-Trimmer",
+    "subtitle": "Schneide Audiospuren visuell zu, passe Zeitstempel exakt an und füge sanfte Ein- und Ausblendungen direkt im Browser-Speicher hinzu."
+  },
+  "dropzone": {
+    "title": "Audiodatei hier ablegen",
+    "subtitle": "oder klicken, um Datei vom Gerät auszuwählen",
+    "browseButton": "Audiodatei auswählen",
+    "sampleButton": "Demo-Track laden",
+    "GeneratingSample": "Demo wird erzeugt...",
+    "formats": "Unterstützt MP3, WAV, FLAC, OGG, M4A • Lokal verarbeitet über WebAssembly",
+    "errorUnsupported": "Bitte wähle eine gültige Audiodatei aus (MP3, WAV, FLAC, OGG, M4A, AAC)."
+  },
+  "editor": {
+    "replaceFile": "Neue Datei",
+    "playAll": "Alles abspielen",
+    "pause": "Pause",
+    "playRegion": "Auswahl anhören",
+    "loopRegion": "Auswahl wiederholen",
+    "resetRegion": "Zurücksetzen",
+    "zoom": "Zoom",
+    "cutFrom": "Schneiden von (Start)",
+    "cutTo": "Bis (Ende)",
+    "selectionLength": "Clip-Dauer",
+    "totalLength": "Original",
+    "fadeIn": "Einblenden (Fade In)",
+    "fadeOut": "Ausblenden (Fade Out)",
+    "fadeSeconds": "1,5s sanfter Übergang",
+    "outputFormat": "Exportformat",
+    "exportButton": "Audio exportieren",
+    "exportingButton": "Verarbeite mit FFmpeg...",
+    "loadingFfmpeg": "WebAssembly-Engine wird geladen...",
+    "encodingProgress": "Schneiden & Kodieren",
+    "exportSuccess": "Clip exportiert! Der Download wurde automatisch gestartet.",
+    "dragHint": "Ziehe die bordeauxroten Griffe auf der Wellenform oder gib unten exakte Zeitstempel ein.",
+    "fineTuneMinus": "-0,1s anpassen",
+    "fineTunePlus": "+0,1s anpassen",
+    "setAtCursor": "Auf Abspielposition",
+    "currentCursor": "Cursor"
+  },
+  "sections": {
+    "howItWorksTitle": "So funktioniert es in 3 Schritten",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Lokales Audio laden",
+        "description": "Ziehe eine MP3- oder WAV-Datei in den Browser. Deine Datei bleibt ausschließlich im Arbeitsspeicher deines Geräts."
+      },
+      {
+        "step": "02",
+        "title": "Bereich wählen & verfeinern",
+        "description": "Verschiebe die Griffe auf der Wellenform für deinen gewünschten Ausschnitt. Aktiviere bei Bedarf Fade In oder Fade Out."
+      },
+      {
+        "step": "03",
+        "title": "Sofortiger Wasm-Export",
+        "description": "Klicke auf Exportieren, um dein Audio per FFmpeg.wasm millisekundengenau zuzuschneiden und herunterzuladen."
+      }
+    ],
+    "featuresTitle": "Entwickelt für Geschwindigkeit & Datenschutz",
+    "features": [
+      {
+        "title": "Keine Server-Uploads",
+        "description": "Dekodierung, Wellenform-Darstellung und Zuschnitt erfolgen zu 100% lokal in deiner Browser-Sandbox."
+      },
+      {
+        "title": "Millisekunden-Präzision",
+        "description": "Angetrieben von Wavesurfer.js Regions und FFmpeg WebAssembly für exakte Schnitte."
+      },
+      {
+        "title": "Sanfte Fade-Kurven",
+        "description": "Füge saubere Ein- und Ausblendungen mit einem einzigen Klick hinzu."
+      }
+    ],
+    "faqTitle": "Häufig gestellte Fragen",
+    "faqs": [
+      {
+        "q": "Werden meine Audiodateien auf einen Server hochgeladen?",
+        "a": "Nein, niemals. AudioCutter läuft vollständig in deinem Webbrowser über die HTML5 File API, Wavesurfer.js und FFmpeg.wasm. Deine Dateien verlassen dein Gerät nicht."
+      },
+      {
+        "q": "Welche Audioformate kann ich schneiden und exportieren?",
+        "a": "Du kannst MP3-, WAV-, FLAC-, OGG-, M4A- und AAC-Dateien öffnen und den geschnittenen Clip direkt als MP3 oder WAV speichern."
+      },
+      {
+        "q": "Wie gelingen präzise Schnitte auf Mobilgeräten oder am Desktop?",
+        "a": "Ziehe die Start- und Endgriffe auf der Wellenform, nutze die Zoom-Steuerung oder gib die exakten Zeiten in die Felder ein."
+      }
+    ]
+  },
+  "footer": {
+    "privacyNote": "100% Client-seitige Audioverarbeitung. Keine Telemetrie, kein Cloud-Speicher.",
+    "builtWith": "Erstellt mit Astro, React, Wavesurfer.js & FFmpeg.wasm"
+  }
+}

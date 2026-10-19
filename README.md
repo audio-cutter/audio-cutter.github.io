@@ -9,12 +9,12 @@
 [![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![FFmpeg.wasm](https://img.shields.io/badge/FFmpeg.wasm-007808?style=for-the-badge&logo=ffmpeg&logoColor=white)](https://ffmpegwasm.netlify.app/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Support Developer](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/kisharadilz)
+[![Support Developer](https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/kishara)
 
 **Visually slice, fine-tune, and apply smooth fade transitions to MP3, WAV, FLAC, OGG, and M4A files directly in your browser's memory.**  
 *100% Client-Side WebAssembly Processing • Zero Server Uploads • Complete User Privacy*
 
-[**Launch Web App →**](https://audio-cutter.github.io/) · [**Report Bug**](https://github.com/audio-cutter/audio-cutter.github.io/issues) · [**Support the Developer ☕**](https://buymeacoffee.com/kisharadilz)
+[**Launch Web App →**](https://audio-cutter.github.io/) · [**Report Bug**](https://github.com/audio-cutter/audio-cutter.github.io/issues) · [**Support the Developer ☕**](https://ko-fi.com/kishara)
 
 </div>
 
@@ -178,9 +178,9 @@ This repository includes a pre-configured GitHub Actions workflow ([`.github/wor
 
 If **AudioCutter** saves you time or helps with your projects, consider supporting ongoing development:
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Support_on-Buy_Me_a_Coffee-790D16?style=for-the-badge&logo=buy-me-a-coffee&logoColor=F5EFE1)](https://buymeacoffee.com/kisharadilz)
+[![Support on Ko-fi](https://img.shields.io/badge/Support_on-Ko--fi-790D16?style=for-the-badge&logo=ko-fi&logoColor=F5EFE1)](https://ko-fi.com/kishara)
 
-- **Support Link:** [https://buymeacoffee.com/kisharadilz](https://buymeacoffee.com/kisharadilz)
+- **Support Link:** [https://ko-fi.com/kishara](https://ko-fi.com/kishara)
 
 ---
 
